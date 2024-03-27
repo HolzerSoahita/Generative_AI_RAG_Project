@@ -1,0 +1,7 @@
+gradio
+langchain 
+sentence_transformers 
+faiss-cpu 
+ctransformers
+ctransformers[cuda]
+ctransformers[gptq]
