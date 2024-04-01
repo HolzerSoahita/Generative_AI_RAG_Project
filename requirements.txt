@@ -5,3 +5,14 @@ faiss-cpu
 ctransformers
 ctransformers[cuda]
 ctransformers[gptq]
+pypdf
+docx2txt
+python-pptx
+python-docx
+openpyxl
+langchain-text-splitters
+langchain_experimental 
+langchain_openai
+langchain-community
+python-dotenv
+unstructured

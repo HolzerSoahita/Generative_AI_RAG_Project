@@ -1,6 +1,12 @@
 # pip environement
 ragvenv/
 
+# folder database content
+database/*
+
+# zip folder content
+zip/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
