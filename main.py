@@ -2,6 +2,7 @@ import gradio as gr
 from library.chunking import chunking_from_folder,create_db_from_document,create_db_from_text
 from library.rag import Rag
 import os, uuid, shutil, tempfile
+from huggingface_hub import HfApi
 
 def on_change_model(choice):
     print(f"choice = {choice}")
@@ -129,6 +130,102 @@ def do_chunking(drp_uses_case_choice, path_uses_case_folder, drp_chunking_algo_c
     return "Chunking Finished",path_zip_folder_all_use_cases
 
 
+def test_connection_huggingface(hf_model_name, hf_api_key):
+    if (hf_api_key is None) or (hf_api_key.strip()==""):
+        return "Hugging Face api invalid"
+    
+    try:
+        # Create an instance of HfApi
+        hf_api = HfApi(
+            endpoint="https://huggingface.co", # Can be a Private Hub endpoint.
+            token=hf_api_key, # Token is not persisted on the machine.
+        )
+
+        # Check if the model exists
+        model_info = hf_api.model_info(hf_model_name)
+
+        if model_info:
+            return "Connection to Hugging Face established successfully!!!"
+        else:
+            return f"Model '{hf_model_name}' does not exist on Hugging Face."
+    except Exception as e:
+        return f"Failed to establish connection to Hugging Face"
+
+
+def do_parameterizing(choice_model,hf_model_name,hf_api_key,path_model,choice_resource,batch_size,max_seq_len):
+    try:
+        if choice_model == "HuggingFace":
+            user_rag_object.value = Rag(model=hf_model_name, model_type='llama', device=choice_resource.lower(), length=max_seq_len, creativity=0.1,batch_size=batch_size,hf_key=hf_api_key)
+        elif choice_model == "From PC":
+            user_rag_object.value = Rag(model=path_model, model_type='llama', device=choice_resource.lower(), length=max_seq_len, creativity=0.1,batch_size=batch_size)
+        return "Parameterizing successfull !!!"
+    except:
+        return "Parameterizing failed !!!"
+
+def do_RAG(path_vector_dataset_folder=None,area_prompt=None):
+    Rag_object = user_rag_object.value
+    if path_vector_dataset_folder is not None:
+        # Create a temporary directory
+        temp_dir = tempfile.mkdtemp()
+
+        try:
+            # Your code to use the temporary directory goes here
+            # For example, if you want to copy all files from path_vector_dataset_folder to the temporary directory:
+            for file_path in path_vector_dataset_folder:
+                shutil.copy(file_path, temp_dir)
+
+            # Use the temporary directory in place of add_local_db
+            Rag_object.add_local_db(temp_dir)
+            user_rag_object.value = Rag_object
+        finally:
+            # Ensure the temporary directory is deleted whether or not add_local_db() succeeds
+            shutil.rmtree(temp_dir)
+
+    # doing rag
+    if area_prompt is not None:
+        output = Rag_object.ask(query=area_prompt)
+    else:
+        return None 
+
+    result =f"""
+    <h1>Result of the query : </h1>
+    <p> {output["result"]} </p>
+    <h1>Document informations : </h1>
+    <p>{output['source_documents'][0].metadata} </p>
+    """
+
+    return result,result
+    
+def do_Augmented_RAG(prompt_creation,drp_model_available,creativity_level,tone,len_out):
+    Rag_object = user_rag_object.value
+    if drp_model_available =="LLama2":
+        model = "TheBloke/toxicqa-Llama2-7B-GGUF"
+        Rag_object.augment(model_available=model,creativity_level = creativity_level,len_out=len_out)
+        user_rag_object.value = Rag_object
+        if prompt_creation is not None:
+            output = Rag_object.ask(query=prompt_creation,tone=tone)
+        else:
+            return None
+    elif drp_model_available =="Mistral":
+        model = "TheBloke/Mistral-7B-Instruct-v0.1-GGUF"
+        Rag_object.augment(model_available=model,creativity_level = creativity_level,len_out=len_out)
+        user_rag_object.value = Rag_object
+        if prompt_creation is not None:
+            output = Rag_object.ask(query=prompt_creation,tone=tone)
+        else:
+            return None
+    
+    result =f"""
+    <h1>Result of the query : </h1>
+    <p> {output["result"]} </p>
+    <h1>Document informations : </h1>
+    <p>{output['source_documents'][0].metadata} </p>
+    """
+
+    return result,
+
+
+
 
 # Interface of Gradio
 with gr.Blocks() as demo:
@@ -138,6 +235,7 @@ with gr.Blocks() as demo:
 
     user_folder = gr.State("")
     user_unique_id = gr.State("")
+    user_rag_object = gr.State(object)
 
     # The Tab Interface for initial chunking setup
     with gr.Tab("Init chunking setup") as Tab1:
@@ -170,18 +268,24 @@ with gr.Blocks() as demo:
         with gr.Group(visible=(choice_model.value == "HuggingFace")) as hf_group:
             with gr.Row():
                 hf_model_name = gr.Textbox(label="Model Name", type="text",value="TheBloke/Mistral-7B-v0.1-GGUF",interactive=True)
-                api_key = gr.Textbox(label="API key", type="text")
+                hf_api_key = gr.Textbox(label="Hugging Face API key", type="text")
             button_connect_hf = gr.Button("Connect")
+            test_connection_state = gr.Markdown()
+            button_connect_hf.click(test_connection_huggingface,inputs=[hf_model_name,hf_api_key],outputs=[test_connection_state])
+        
         with gr.Group(visible=(choice_model.value == "From PC")) as local_group:
             # path_model = gr.File(label="Path of the model", type="filepath",file_types=['.bin','.gguf'],file_count='directory')
-            path_model = gr.File(label="Path of the model", type="filepath",file_count='directory')
+            path_model = gr.File(label="Path of the model", type="filepath",file_types=['.bin','.gguf'],file_count='single')
         choice_resource = gr.Radio(["CPU", "GPU"], label="Choose the type of resource",value="CPU",interactive=True)
+        
         with gr.Group():   
             with gr.Row():
-                batch_size = gr.Number(value=64, label="Batch size",interactive=True)
-                max_seq_len = gr.Number(value=64, label="Max sequence length",interactive=True)
+                batch_size = gr.Number(value=8, label="Batch size",interactive=True)
+                max_seq_len = gr.Number(value=256, label="Max sequence length",interactive=True)
 
         button_parameterize = gr.Button("Parameterize")
+        button_parameterizing_completed = gr.Markdown()
+        button_parameterize.click(do_parameterizing,inputs=[choice_model,hf_model_name,hf_api_key,path_model,choice_resource,batch_size,max_seq_len],outputs=[button_parameterizing_completed])
 
         choice_model.change(on_change_model, inputs=[choice_model],outputs=[hf_group,local_group])
         
@@ -191,7 +295,7 @@ with gr.Blocks() as demo:
         area_prompt = gr.TextArea(label="Prompt", type="text",interactive=True)
         start_rag = gr.Button("Start RAG")
         html_generated_answer_rag= gr.HTML()
-
+        
     # The Tab Interface for augmenting Context
     with gr.Tab("Augmenting Context") as Tab4:
         retreived_context = gr.HTML()
@@ -215,10 +319,14 @@ with gr.Blocks() as demo:
         
         button_generate = gr.Button("Generate")
         html_generated_answer_rag_augmenting_context= gr.HTML()
+        button_generate.click(do_Augmented_RAG,inputs=[prompt_creation,drp_model_available,creativity_level,tone,len_out],outputs=[html_generated_answer_rag_augmenting_context])
        
         list_saving_otion = ['DOCX', 'PDF', 'HTML']
         saving_option = gr.Dropdown(choices=list_saving_otion,value='PDF',interactive=True,label="Saving option")
         button_save = gr.Button("Save")
+
+    start_rag.click(do_RAG,inputs=[path_vector_dataset_folder,area_prompt],outputs=[html_generated_answer_rag,retreived_context])
+
 
 if __name__ == "__main__":
     demo.launch(debug=True)

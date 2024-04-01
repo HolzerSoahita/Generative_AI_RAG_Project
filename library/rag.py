@@ -10,25 +10,31 @@ class Rag:
     This class represents a RAG model for question answering.
     """
 
-    def __init__(self, model, local_db, model_type='llama', device='cpu', length=256, creativity=0.1):
+    def __init__(self, model, model_type='llama', device='cpu', length=256, creativity=0.1,batch_size=8,hf_key=None):
         """
         Initializes the Rag class with the given parameters.
 
         Args:
             model (str): The name of the model to be used.
-            local_db (str): The local database to use.
             model_type (str, optional): The type of the model. Defaults to 'llama'.
             device (str, optional): The device to run the model on. Defaults to 'cpu'.
             length (int, optional): The maximum number of new tokens for the model. Defaults to 256.
             creativity (float, optional): The temperature for the model. Defaults to 0.1.
         """
-        config = {'max_new_tokens': length, 'temperature': creativity}
+        config = {'max_new_tokens': length, 'temperature': creativity,'batch_size':batch_size}
         self.llm = CTransformers(model=model,
                                  model_type=model_type,
                                  config=config)
+        
+        if device.lower()=="gpu":
+            device='cuda'
+
         self.embeddings = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             model_kwargs={'device': device})
+        
+        
+    def add_local_db(self,local_db):
         self.db = FAISS.load_local(local_db, self.embeddings, allow_dangerous_deserialization=True)
         self.retriever = self.db.as_retriever(search_kwargs={'k': 2})
         self.prompt = PromptTemplate(
@@ -62,3 +68,14 @@ class Rag:
         output = self.qa_llm({'query': prompt})
         return output
 
+
+    def augment(self,model_available,creativity_level,len_out):
+        config = {'max_new_tokens': len_out, 'temperature': creativity_level,'batch_size':8}
+        self.llm = CTransformers(model=model_available,
+                                 model_type='llama',
+                                 config=config)  
+        self.qa_llm = RetrievalQA.from_chain_type(llm=self.llm,
+                                                  chain_type='stuff',
+                                                  retriever=self.retriever,
+                                                  return_source_documents=True,
+                                                  chain_type_kwargs={'prompt': self.prompt})
