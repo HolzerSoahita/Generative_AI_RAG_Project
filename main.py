@@ -3,6 +3,7 @@ from library.chunking import chunking_from_folder,create_db_from_document,create
 from library.rag import Rag
 import os, uuid, shutil, tempfile
 from huggingface_hub import HfApi
+from library.FileSaver import FileSaver
 
 def on_change_model(choice):
     print(f"choice = {choice}")
@@ -222,8 +223,32 @@ def do_Augmented_RAG(prompt_creation,drp_model_available,creativity_level,tone,l
     <p>{output['source_documents'][0].metadata} </p>
     """
 
-    return result,
+    save_final_state.value = result
 
+    return result
+
+def save_final(saving_option):
+    saver = FileSaver(html=save_final_state.value)
+
+    # Define the directory name and zip file name
+    directory_name = user_folder.value
+    zip_folder = "zip/"+str(user_unique_id.value)+"/"
+
+    # Create the directory if it doesn't exist
+    os.makedirs(zip_folder, exist_ok=True)
+
+    final_file_path = ""
+    if saving_option == 'DOCX':
+        final_file_path = os.path.join(zip_folder, "final_file.docx")
+        saver.save_docx(final_file_path)
+    elif saving_option == 'PDF':
+        final_file_path = os.path.join(zip_folder, "final_file.pdf")
+        saver.save_pdf(final_file_path)
+    elif saving_option == 'HTML':
+        final_file_path = os.path.join(zip_folder, "final_file.html")
+        saver.save_html(final_file_path)
+    
+    return final_file_path
 
 
 
@@ -236,6 +261,7 @@ with gr.Blocks() as demo:
     user_folder = gr.State("")
     user_unique_id = gr.State("")
     user_rag_object = gr.State(object)
+    save_final_state = gr.State("")
 
     # The Tab Interface for initial chunking setup
     with gr.Tab("Init chunking setup") as Tab1:
@@ -321,9 +347,10 @@ with gr.Blocks() as demo:
         html_generated_answer_rag_augmenting_context= gr.HTML()
         button_generate.click(do_Augmented_RAG,inputs=[prompt_creation,drp_model_available,creativity_level,tone,len_out],outputs=[html_generated_answer_rag_augmenting_context])
        
-        list_saving_otion = ['DOCX', 'PDF', 'HTML']
-        saving_option = gr.Dropdown(choices=list_saving_otion,value='PDF',interactive=True,label="Saving option")
+        list_saving_option = ['DOCX', 'PDF', 'HTML']
+        saving_option = gr.Dropdown(choices=list_saving_option,value='HTML',interactive=True,label="Saving option")
         button_save = gr.Button("Save")
+        button_save.click(save_final,inputs=[saving_option],outputs=gr.File())
 
     start_rag.click(do_RAG,inputs=[path_vector_dataset_folder,area_prompt],outputs=[html_generated_answer_rag,retreived_context])
 

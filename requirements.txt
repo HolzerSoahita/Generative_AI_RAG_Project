@@ -17,3 +17,5 @@ langchain-community
 python-dotenv
 unstructured
 huggingface-hub
+fpdf
+beautifulsoup4
