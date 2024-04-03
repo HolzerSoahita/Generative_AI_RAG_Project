@@ -28,13 +28,13 @@ To install this app, follow these steps:
 * The folder of used dataset(one folder by use case) and the related questions can be found in this [link](dataset_example)
 * The result of the RAG experience is sum up with this following table :
 
-| Chunking Algorithm     | Number of documents | Type of documents | use case                     | Number of questions | Number of true predicted values | Efficacy rate |
-| ---------------------- | ------------------- | ----------------- | ---------------------------- | ------------------- | ------------------------------- | ------------- |
-| Fixed sized chunking   | 3                   | pdf               | Scientific papers            | 10                  | 10                              | 100%          |
-| Content-aware chunking | 3                   | docx, pptx        | slides and technical reports | 10                  | 10                              | 100%          |
-| Recursive chunking     | 3                   | pdf               | Legal document Analysis      | 10                  | 10                              | 100%          |
-| Semantic chunking      | 3                   | csv, excel, text  | personal docs                | 10                  | 10                              | 100%          |
-| Agentic chunking       | 3                   | csv, excel, text  | personal docs                | 10                  | 10                              | 100%          |
+| Chunking Algorithm     | Number of documents | Type of documents | use case                     | Number of questions | Number of true predicted values |
+| ---------------------- | ------------------- | ----------------- | ---------------------------- | ------------------- | ------------------------------- |
+| Fixed sized chunking   | 3                   | pdf               | Scientific papers            | 10                  | 10                              | 
+| Content-aware chunking | 3                   | docx, pptx        | slides and technical reports | 10                  | 10                              | 
+| Recursive chunking     | 3                   | pdf               | Legal document Analysis      | 10                  | 10                              | 
+| Semantic chunking      | 3                   | csv, excel, text  | personal docs                | 10                  | 10                              | 
+| Agentic chunking       | 3                   | csv, excel, text  | personal docs                | 10                  | 10                              | 
 
 **NB**: I recommend to choose a text generation model that can support chat format to have better result
 
