@@ -25,7 +25,7 @@ To install this app, follow these steps:
 
 * This experience is released with the model ``TheBloke/Mistral-7B-Instruct-v0.2-GGUF``.
 * We use size input 256 and overlap 20 on the chunking
-* The folder of used dataset(one folder by use case) and the related questions(plus answers or pages of answer) can be found in this [link](dataset_example)
+* The folder of used dataset(one folder by use case) and the related questions can be found in this [link](dataset_example)
 * The result of the RAG experience is sum up with this following table :
 
 | Chunking Algorithm     | Number of documents | Type of documents | use case                     | Number of questions | Number of true predicted values | Efficacy rate |
