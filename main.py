@@ -2,7 +2,7 @@ import os
 import shutil
 import tempfile
 import uuid
-
+import json
 import gradio as gr
 from huggingface_hub import HfApi
 
@@ -191,6 +191,32 @@ def do_parameterizing(choice_model,hf_model_name,hf_api_key,path_model,choice_re
         return "Parameterizing successfull !!!"
     except:
         return "Parameterizing failed !!!"
+    
+def pretty_print_json_to_html(data):
+    """
+        Convert json data to html
+    """
+    # Convert string to dictionary
+    if isinstance(data, str):
+        data = json.loads(data.replace("'", "\""))
+
+    print(f"Json data : {data}")
+    
+    # Increment the row number by 1 if it exists because it's begin by 0
+    if 'row' in data:
+        data['row'] = int(data['row']) + 1
+
+    # Increment the page number by 1 if it exists because it's begin by 0
+    if 'page' in data:
+        data['page'] = int(data['page']) + 1
+
+    # Convert each key-value pair to HTML unordered list
+    html_code = "<ul>"
+    for key, value in data.items():
+        html_code += f"  <li>{key} : {value}</li>"
+    html_code += "</ul>"
+    
+    return html_code
 
 def do_RAG(path_vector_dataset_folder=None,area_prompt=None,progress=gr.Progress()):
     """
@@ -232,7 +258,7 @@ def do_RAG(path_vector_dataset_folder=None,area_prompt=None,progress=gr.Progress
         <h1>Result of the query : </h1>
         <p> {output["result"]} </p>
         <h1>Document informations : </h1>
-        <p>{output['source_documents'][0].metadata} </p>
+        {pretty_print_json_to_html(output['source_documents'][0].metadata)}
         """
     else:
         result ="No database vector"
@@ -280,7 +306,7 @@ def do_Augmented_RAG(prompt_creation,drp_model_available,creativity_level,tone,l
         <h1>Result of the query : </h1>
         <p> {output["result"]} </p>
         <h1>Document informations : </h1>
-        <p>{output['source_documents'][0].metadata} </p>
+        {pretty_print_json_to_html(output['source_documents'][0].metadata)}
         """
         save_final_state.value = result
     else:
