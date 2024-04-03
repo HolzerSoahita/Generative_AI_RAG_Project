@@ -1,11 +1,24 @@
+import os
+import shutil
+import tempfile
+import uuid
+
 import gradio as gr
-from library.chunking import chunking_from_folder,create_db_from_document,create_db_from_text
-from library.rag import Rag
-import os, uuid, shutil, tempfile
 from huggingface_hub import HfApi
+
+from library.chunking import (
+    chunking_from_folder,
+    create_db_from_document,
+    create_db_from_text,
+)
 from library.FileSaver import FileSaver
+from library.rag import Rag
+
 
 def on_change_model(choice):
+    """
+        Gradio change model function
+    """
     print(f"choice = {choice}")
     if choice == "HuggingFace":
         return gr.Group(visible=True),gr.Group(visible=False)
@@ -13,6 +26,9 @@ def on_change_model(choice):
         return gr.Group(visible=False),gr.Group(visible=True)
     
 def onChangeAlgoChoice(AlgoChoice):
+    """
+        Gradio algo choice function 
+    """
     if AlgoChoice == "Agentic chunking":
         return gr.Textbox(visible=True)
     else:
@@ -20,6 +36,10 @@ def onChangeAlgoChoice(AlgoChoice):
 
 
 def create_unique_userSubfolder():
+    """
+        function creation unique subfolder
+    """
+
     # Generate a unique UUID
     unique_id = uuid.uuid4()
     user_unique_id.value = unique_id
@@ -132,6 +152,9 @@ def do_chunking(drp_uses_case_choice, path_uses_case_folder, drp_chunking_algo_c
 
 
 def test_connection_huggingface(hf_model_name, hf_api_key):
+    """
+        Function to test huggingface connexion
+    """
     if (hf_api_key is None) or (hf_api_key.strip()==""):
         return "Hugging Face api invalid"
     
@@ -153,18 +176,29 @@ def test_connection_huggingface(hf_model_name, hf_api_key):
         return f"Failed to establish connection to Hugging Face"
 
 
-def do_parameterizing(choice_model,hf_model_name,hf_api_key,path_model,choice_resource,batch_size,max_seq_len):
+def do_parameterizing(choice_model,hf_model_name,hf_api_key,path_model,choice_resource,batch_size,max_seq_len,progress=gr.Progress()):
+    """
+        Function to do the gradio parameterizing
+    """
+    progress(0, "Starting")
     try:
+        progress(0.1, "Parametizing...")
         if choice_model == "HuggingFace":
             user_rag_object.value = Rag(model=hf_model_name, model_type='llama', device=choice_resource.lower(), length=max_seq_len, creativity=0.1,batch_size=batch_size,hf_key=hf_api_key)
         elif choice_model == "From PC":
             user_rag_object.value = Rag(model=path_model, model_type='llama', device=choice_resource.lower(), length=max_seq_len, creativity=0.1,batch_size=batch_size)
+        progress(0.9, "Parametizing finished...")
         return "Parameterizing successfull !!!"
     except:
         return "Parameterizing failed !!!"
 
-def do_RAG(path_vector_dataset_folder=None,area_prompt=None):
+def do_RAG(path_vector_dataset_folder=None,area_prompt=None,progress=gr.Progress()):
+    """
+        Function to do the RAG
+    """
+    progress(0, "Starting")
     Rag_object = user_rag_object.value
+    progress(0.1, "Vector configuration...")
     if path_vector_dataset_folder is not None:
         # Create a temporary directory
         temp_dir = tempfile.mkdtemp()
@@ -181,55 +215,88 @@ def do_RAG(path_vector_dataset_folder=None,area_prompt=None):
         finally:
             # Ensure the temporary directory is deleted whether or not add_local_db() succeeds
             shutil.rmtree(temp_dir)
-
+    
+    progress(0.5, "RAG generation...")
     # doing rag
     if area_prompt is not None:
-        output = Rag_object.ask(query=area_prompt)
+        try:
+            output = Rag_object.ask(query=area_prompt)
+        except:
+            return "<p>Error system! Please, refresh the page and redo again</p>"
     else:
-        return None 
+        return "Fill the prompt please!" 
 
-    result =f"""
-    <h1>Result of the query : </h1>
-    <p> {output["result"]} </p>
-    <h1>Document informations : </h1>
-    <p>{output['source_documents'][0].metadata} </p>
-    """
+    progress(0.9, "RAG completed! showing result...")
+    if output is not None:
+        result =f"""
+        <h1>Result of the query : </h1>
+        <p> {output["result"]} </p>
+        <h1>Document informations : </h1>
+        <p>{output['source_documents'][0].metadata} </p>
+        """
+    else:
+        result ="No database vector"
+    progress(1, "Finished!!!")
 
     return result,result
     
-def do_Augmented_RAG(prompt_creation,drp_model_available,creativity_level,tone,len_out):
+def do_Augmented_RAG(prompt_creation,drp_model_available,creativity_level,tone,len_out,progress=gr.Progress()):
+    """
+        Function to do augmented RAG 
+    """
+
+    progress(0, "Starting")
     Rag_object = user_rag_object.value
     if drp_model_available =="LLama2":
+        progress(0.1, "Applying modification...")
         model = "TheBloke/toxicqa-Llama2-7B-GGUF"
         Rag_object.augment(model_available=model,creativity_level = creativity_level,len_out=len_out)
         user_rag_object.value = Rag_object
+        progress(0.5, "RAG generation...")
         if prompt_creation is not None:
-            output = Rag_object.ask(query=prompt_creation,tone=tone)
+            try:
+                output = Rag_object.ask(query=prompt_creation,tone=tone)
+            except:
+                return "<p>Error system! Please, refresh the page and redo again</p>"
         else:
-            return None
+            return "Fill the prompt please!"
     elif drp_model_available =="Mistral":
+        progress(0.1, "Applying modification...")
         model = "TheBloke/Mistral-7B-Instruct-v0.1-GGUF"
         Rag_object.augment(model_available=model,creativity_level = creativity_level,len_out=len_out)
         user_rag_object.value = Rag_object
+        progress(0.5, "RAG generation...")
         if prompt_creation is not None:
-            output = Rag_object.ask(query=prompt_creation,tone=tone)
+            try:
+                output = Rag_object.ask(query=prompt_creation,tone=tone)
+            except:
+                return "<p>Error system! Please, refresh the page and redo again</p>"
         else:
-            return None
+            return "Fill the prompt please!"
     
-    result =f"""
-    <h1>Result of the query : </h1>
-    <p> {output["result"]} </p>
-    <h1>Document informations : </h1>
-    <p>{output['source_documents'][0].metadata} </p>
-    """
-
-    save_final_state.value = result
+    progress(0.9, "RAG completed! showing result...")
+    if output is not None:
+        result =f"""
+        <h1>Result of the query : </h1>
+        <p> {output["result"]} </p>
+        <h1>Document informations : </h1>
+        <p>{output['source_documents'][0].metadata} </p>
+        """
+        save_final_state.value = result
+    else:
+        result ="No database vector"
 
     return result
 
-def save_final(saving_option):
+def save_final(saving_option,progress=gr.Progress()):
+    """
+        Function to save the result of the augmented RAG
+    """
+
+    progress(0, "Starting")
     saver = FileSaver(html=save_final_state.value)
 
+    progress(0.1, "Configuration...")
     # Define the directory name and zip file name
     directory_name = user_folder.value
     zip_folder = "zip/"+str(user_unique_id.value)+"/"
@@ -237,6 +304,7 @@ def save_final(saving_option):
     # Create the directory if it doesn't exist
     os.makedirs(zip_folder, exist_ok=True)
 
+    progress(0.3, "Saving...")
     final_file_path = ""
     if saving_option == 'DOCX':
         final_file_path = os.path.join(zip_folder, "final_file.docx")
@@ -247,6 +315,8 @@ def save_final(saving_option):
     elif saving_option == 'HTML':
         final_file_path = os.path.join(zip_folder, "final_file.html")
         saver.save_html(final_file_path)
+    
+    progress(1, "Finished...")
     
     return final_file_path
 
@@ -356,6 +426,7 @@ with gr.Blocks() as demo:
 
 
 if __name__ == "__main__":
+    # Launching the gradio interface
     demo.launch(debug=True)
 
 

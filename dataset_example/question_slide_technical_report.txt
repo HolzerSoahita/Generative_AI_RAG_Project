@@ -1,0 +1,15 @@
+TechnicalRepport.pptx
+1- How to organize my presentation in technical report ?  (Answer : page 3) 
+2- How to maximize my effectiveness in technical report ? (Answer : page 4) 
+3- What is in the opening in techincal report ? (Answer : page 5) 
+
+technical-report-template-10.doc
+4- how much clearance is desired around a car when parking? (Answer : page 31)
+5- How does the measurement procedure alter the recommendation? (Answer : page 31)
+6- How does the desired clearance vary with driver age and sex? (Answer : page 32)
+7- How can the desired clearance be predicted? (Answer :page 32)
+8- Is the size of the person exiting a vehicle related to the clearance desired for opening the door? (Answer : page 33)
+
+technical-report-template-26.doc
+9-What are the two main processes that provide information on recent seismicity, and how are they updated? (Answer : page 6)
+10- What is Gmtmap ? (Answer : page 8)

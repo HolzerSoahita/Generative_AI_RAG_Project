@@ -1,0 +1,15 @@
+A Survey on Bias and Fairness in Machine Learning :
+1. What is the main concern regarding fairness in AI systems? 
+2. What are some of the real-world applications that have shown biases? 
+3. How does one propose to avoid existing bias in AI systems? 
+4. What future directions does one suggest to mitigate the problem of bias in AI systems? 
+
+Attention Is All You Need :
+5. Can you explain the concept of the Transformer model? 
+6. How does the Transformer model differ from traditional recurrent or convolutional neural networks? 
+7. What were the results of the experiments conducted using the Transformer model? 
+
+Green AI :
+8. What is the estimated increase in computations required for deep learning research from 2012 to 2018? 
+9. What is the carbon footprint of AI? 
+10. What is the proposed solution to make AI greener? 

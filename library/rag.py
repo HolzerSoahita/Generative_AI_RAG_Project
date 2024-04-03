@@ -1,8 +1,8 @@
-from langchain_community.llms import CTransformers
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import FAISS
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.llms import CTransformers
+from langchain_community.vectorstores import FAISS
 
 
 class Rag:
@@ -33,6 +33,8 @@ class Rag:
             model_name="sentence-transformers/all-MiniLM-L6-v2",
             model_kwargs={'device': device})
         
+        self.db = None
+        
         
     def add_local_db(self,local_db):
         self.db = FAISS.load_local(local_db, self.embeddings, allow_dangerous_deserialization=True)
@@ -42,6 +44,7 @@ class Rag:
                         If you don't know the answer, just say that you don't know, don't try to make up an answer.
                         Context: {context}
                         Question: {question}
+                        Only return the helpful answer below and nothing else.
                      """,
             input_variables=['context', 'question'])
         self.qa_llm = RetrievalQA.from_chain_type(llm=self.llm,
@@ -61,10 +64,18 @@ class Rag:
         Returns:
             dict: The output object from the question.
         """
+
+        # If no database vector do nothing
+        if self.db is None:
+            return None
+        
+        # Test tone exist
         if tone is None:
             prompt = f'"{query}"'
         else:
             prompt = f'"{query}" Use the {tone} tone to answer'
+
+        # Doing RAG
         output = self.qa_llm({'query': prompt})
         return output
 

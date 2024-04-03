@@ -1,0 +1,24 @@
+# Meeting Notes
+
+## Date: March 27, 2024
+## Location: Cachan, Île-de-France, France
+## Attendees: John Doe, Jane Smith, Robert Brown
+
+### Agenda
+1. Project Status Update
+2. Budget Review
+3. Timeline Discussion
+4. Risk Assessment
+5. Next Steps
+
+### Notes
+- John Doe reported that the project is on track and all milestones have been met so far.
+- Jane Smith presented the budget review and highlighted areas where costs could be reduced.
+- Robert Brown led the timeline discussion and proposed a new schedule to accommodate additional tasks.
+- The team conducted a risk assessment and identified potential issues that could impact the project timeline.
+- The team agreed on the next steps and assigned tasks to each member.
+
+## Action Items
+- John Doe to provide a detailed project status report by April 1, 2024.
+- Jane Smith to finalize the revised budget by April 3, 2024.
+- Robert Brown to circulate the new schedule for team approval by April 2, 2024.
