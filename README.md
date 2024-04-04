@@ -5,7 +5,7 @@
 This is a project to make an interface to use RAG easily
 
 ## Installation :
-
+### Local machine installation (Recommended)
 To install this app on your local machine, follow these steps:
 
 - Install python 3.10 or higher
@@ -20,7 +20,17 @@ To install this app on your local machine, follow these steps:
 - Install the requirements.txt file using the command: ``pip install -r requirements.txt``
 - Run the app with the command: ``python main.py``. This will launch a web server on your local machine and click the link generated in the console to access the gradio app.
 - To stop the server press CTRL+C   
-**NB**: If you try to execute this code on Google Colab, the link generated doesn't work because it is blocked by Google Colab
+
+### Google colab installation (Not recommended because of slowness)
+- Download the file [Test_RAG_Generative_AI.ipynb](Test_RAG_Generative_AI.ipynb)
+- Upload it on google colab
+- Run the cell of this notebook until the cell of ``!pip install -r requirements.txt``
+- You need to open the file ``main.py`` in the file explorer(It is in the folder Generative_AI_RAG_Project)
+- Change the code ``demo.launch(debug=True)`` at the line 456 to ``demo.launch(debug=True,share=True)``
+- Now you can run the cell ``!python main.py``
+- Click on the public URL not the local URL, because the local URL is blocked by google colab
+- **NB**: The process is longer than the local installation because it is shared gradio link (for example, if we upload a file, you will see that nothing is happen but after a few second the file is uploaded). I really suggest you to make local machine installation to avoid this problem.
+
 
 ## RAG Experience :
 
