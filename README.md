@@ -20,6 +20,7 @@ To install this app on your local machine, follow these steps:
 - Install the requirements.txt file using the command: ``pip install -r requirements.txt``
 - Run the app with the command: ``python main.py``. This will launch a web server on your local machine and click the link generated in the console to access the gradio app.
 - To stop the server press CTRL+C
+**NB**: If you try to execute this code on Google Colab, the link generated doesn't work because it is blocked by Google Colab
 
 ## RAG Experience :
 
