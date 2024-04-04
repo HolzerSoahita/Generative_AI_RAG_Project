@@ -200,7 +200,7 @@ def pretty_print_json_to_html(data):
     if isinstance(data, str):
         data = json.loads(data.replace("'", "\""))
 
-    print(f"Json data : {data}")
+    # print(f"Json data : {data}")
     
     # Increment the row number by 1 if it exists because it's begin by 0
     if 'row' in data:
