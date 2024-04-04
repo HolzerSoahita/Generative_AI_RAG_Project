@@ -6,7 +6,7 @@ This is a project to make an interface to use RAG easily
 
 ## Installation :
 
-To install this app, follow these steps:
+To install this app on your local machine, follow these steps:
 
 - Install python 3.10 or higher
 - Install git if you don't have
