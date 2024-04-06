@@ -1,6 +1,8 @@
-from fpdf import FPDF
+# from fpdf import FPDF
 from docx import Document
 from bs4 import BeautifulSoup
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 
 class FileSaver:
     def __init__(self, html):
@@ -12,11 +14,11 @@ class FileSaver:
         return soup.get_text()
 
     def save_pdf(self, filename):
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.set_font("Arial", size = 15)
-        pdf.cell(200, 10, txt = self.text, ln = True, align = 'C')
-        pdf.output(filename)
+        c = canvas.Canvas(filename, pagesize=letter)
+        width, height = letter
+        c.setFont("Helvetica", 12)
+        c.drawString(30, height - 30, self.text)
+        c.save()
 
     def save_docx(self, filename):
         doc = Document()
@@ -24,5 +26,5 @@ class FileSaver:
         doc.save(filename)
 
     def save_html(self, filename):
-        with open(filename, "w") as file:
+        with open(filename, "w", encoding='utf-8') as file:
             file.write(self.html)
