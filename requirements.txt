@@ -19,3 +19,4 @@ unstructured
 huggingface-hub
 fpdf
 beautifulsoup4
+reportlab

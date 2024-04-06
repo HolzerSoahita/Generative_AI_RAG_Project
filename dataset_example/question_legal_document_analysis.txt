@@ -1,15 +1,27 @@
 US Constitution:
 1. What is the minimum age requirement to be a Senator in the United States? 
-2. Who presides over the Senate when the President of the United States is being tried in an impeachment trial?
+    (Answer: 30 years old)
+2. Who presides over the Senate when the President of the United States is being tried in an impeachment trial? 
+    (Answer: Chief Justice of the United States) 
 3. Which branch of the United States government has the power to propose amendments to the Constitution? 
+    (Answer: The legislative branch)
 4. Which house of the United States Congress has the sole power to try impeachments? 
+    (Answer: The Senate)
+
 
 French constitution:
 5. What are the rights and duties defined by the Charter for Environmental Protection and Sustainable Development in the French constitution? 
+    (Answer: the right to a healthy environment, the duty to respect and protect it, and the duty to contribute to its preservation and enhancement)
 6. Which specific areas are exempt from rules that cannot be altered according to the French Constitution? 
+    (Answer: The French Constitution does not specify any specific areas that are exempt from rules that cannot be altered. It ensures universality, equality, and secrecy in voting for all French nationals, regardless of their gender. However, it does not exclude certain laws from being adapted to the particular organization of the community concerned.)
 7. Under what conditions can authorities derogate from legislative or regulatory provisions for experimental purposes in the French constitution? 
+    (Answer : The French Constitution does not provide explicit rules on this matter, but it is generally accepted that authorities may derogate from legislative or regulatory provisions for experimental purposes under certain conditions. These conditions typically include obtaining necessary authorizations, ensuring public safety and order, respecting fundamental rights and freedoms, and reporting regularly to the relevant authorities. However, any derogation must not contradict the principles of the French Constitution or infringe upon individual liberties. It is also important to note that such derogations are usually temporary and limited in scope. If you have any further questions, please do not hesitate to ask. Helpful answer: The conditions under which authorities can derogate from legislative or regulatory provisions for experimental purposes in the French Constitution are not explicitly stated, but generally accepted as including obtaining necessary authorizations, ensuring public safety and order, respecting fundamental rights and freedoms, and reporting regularly to the relevant authorities. However, any derogation must not contradict the principles of the French Constitution or infringe upon individual liberties, and is usually temporary and limited in scope.)
+
 
 Swiss constitution:
-8. What is the minimum number of eligible voters required to propose a total revision of the Switzerland Federal Constitution through a popular initiative in ? 
+8. What is the minimum number of eligible voters required to propose a total revision of the Switzerland Federal Constitution through a popular initiative in ?
+    (Answer: 100000 persons)
 9. Which article of the Federal Constitution addresses the protection of natural and cultural heritage in Switzerland? 
+    (Answer: Article 78)
 10. Where in the Constitution is the information regarding the financial management of Switzerland located? 
+    (Answer: Articles 95, 97, 98 and 122)

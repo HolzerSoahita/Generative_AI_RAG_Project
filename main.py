@@ -236,7 +236,10 @@ def do_RAG(path_vector_dataset_folder=None,area_prompt=None,progress=gr.Progress
                 shutil.copy(file_path, temp_dir)
 
             # Use the temporary directory in place of add_local_db
-            Rag_object.add_local_db(temp_dir)
+            try:
+                Rag_object.add_local_db(temp_dir)
+            except:
+                return "<p>Error system! Please, refresh the page and redo again</p>"
             user_rag_object.value = Rag_object
         finally:
             # Ensure the temporary directory is deleted whether or not add_local_db() succeeds
@@ -276,7 +279,10 @@ def do_Augmented_RAG(prompt_creation,drp_model_available,creativity_level,tone,l
     if drp_model_available =="LLama2":
         progress(0.1, "Applying modification...")
         model = "TheBloke/toxicqa-Llama2-7B-GGUF"
-        Rag_object.augment(model_available=model,creativity_level = creativity_level,len_out=len_out)
+        try:
+            Rag_object.augment(model_available=model,creativity_level = creativity_level,len_out=len_out)
+        except:
+            return "<p>Error system! Please, refresh the page and redo again</p>"
         user_rag_object.value = Rag_object
         progress(0.5, "RAG generation...")
         if prompt_creation is not None:

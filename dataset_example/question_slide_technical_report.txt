@@ -1,15 +1,25 @@
-TechnicalRepport.pptx
-1- How to organize my presentation in technical report ?  (Answer : page 3) 
-2- How to maximize my effectiveness in technical report ? (Answer : page 4) 
-3- What is in the opening in techincal report ? (Answer : page 5) 
+AI.pptx
+1- What is the definition of Artificial Intelligence ?  
+    (Answer : Artificial Intelligence (AI) is a branch of computer science that aims to create machines that mimic human intelligence. This could be anything from a computer program playing chess to a voice-recognition system like Amazon’s Alexa.) 
+2- What are the type of Artificial Intelligence? 
+    (Answer : Narrow AI, General AI, Superintelligent AI) 
+3- What is the application of Artificial Intelligence ? 
+    (Answer : healthcare, transportation, finance) 
 
 technical-report-template-10.doc
-4- how much clearance is desired around a car when parking? (Answer : page 31)
-5- How does the measurement procedure alter the recommendation? (Answer : page 31)
-6- How does the desired clearance vary with driver age and sex? (Answer : page 32)
-7- How can the desired clearance be predicted? (Answer :page 32)
-8- Is the size of the person exiting a vehicle related to the clearance desired for opening the door? (Answer : page 33)
+4- In general, how much clearance is desired around a car when parking?
+    (answer : The amount of clearance desired around a car can vary depending on the specific vehicle and parking situation. However, generally, a minimum of 2 to 3 feet (0.6 to 0.9 meters) of clearance is recommended for the front and rear of the car, and 3 to 4 feet (0.9 to 1.2 meters) of clearance is recommended for the sides and corners.)
+5- How does the measurement procedure alter the recommendation? 
+    (Answer : The measurement procedure can alter the recommendation by providing data that informs the decision-making process. For example, if the measurement procedure shows that the mean value decreases with practice, it may recommend increasing the amount of practice to achieve better results. However, without specific information about the recommendation and the measurement procedure in question, a definitive answer cannot be given.)
+6- How does the desired clearance vary with driver age and sex? 
+    (Answer : The desired clearance can vary based on factors such as driver age and sex. For example, older drivers may require a greater clearance to avoid obstacles, while the desired clearance for female drivers may be different than for male drivers due to differences in body size and reach)
+7- How can the desired clearance be predicted? 
+    (Answer :The ANOVA procedure begins with the appropriate column of clearance values and determine a typical age for a user of the interface and adjust the value)
+8- Is the size of the person exiting a vehicle related to the clearance desired for opening the door? 
+    (Answer : The size of the person exiting a vehicle can indeed be a factor in determining the required clearance for opening the door.)
 
 technical-report-template-26.doc
-9-What are the two main processes that provide information on recent seismicity, and how are they updated? (Answer : page 6)
-10- What is Gmtmap ? (Answer : page 8)
+9-What are the two main processes that provide information on recent seismicity, and how are they updated? 
+    (Answer : seismicity maps of recent activity (Norway and world). These maps are automatically updated)
+10- What is Gmtmap ? 
+    (Answer : an Expect script to interactively generate GMT scripts)
